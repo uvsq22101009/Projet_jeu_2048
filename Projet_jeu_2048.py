@@ -16,14 +16,13 @@ racine.title("2048")
         
 cells = []   # contient chaque détail de chaque tuile (couleur+nombre)
 matrice = [] # contient les nombres présents sur la grille
-score = 0    # contient le score
 end = None   # cette variable donnera si la partie est gagnée ou perdue,
               # 1 = gagné et 0 = perdu
 
 
     # Fonctions permettant de jouer  
        
-def creer_plat():
+def Creation_Interface():
     # création de la plateforme de jeu
     global cells
     for i in range (4):
@@ -36,43 +35,35 @@ def creer_plat():
             cell_data = {"frame": cell_frame, "number": cell_number}
             row.append(cell_data)
         cells.append(row)
-        
-    # création du tableau de score
-    score_frame = tk.Frame()
-    score_frame.place(relx=0.5, y=45, anchor="center")
-    tk.Label(score_frame, text="Score", font=c.SCORE_LABEL_FONT).grid(row=0)
-    score_label = tk.Label(score_frame, text=str(score), font=c.SCORE_FONT)
-    score_label.grid(row=1)
     
     
-def actualiser_plat(mat):
+def Actualisation_Interface(mat):
     """Cette fonction va actualiser les couleurs/affichages dans le plateau"""
-    global score_label
     for i in range (4):
         for j in range (4):
             valeur_cell = mat[i][j]
             if valeur_cell == 0:
                 cells[i][j]["frame"].config(bg=c.EMPTY_CELL_COLOR)
-                cells[i][j]["number"].config(bg=c.CELL_COLORS, text="")
+                cells[i][j]["number"].config(bg=c.EMPTY_CELL_COLOR, text="") 
             else:
                 cells[i][j]["frame"].config(bg=c.CELL_COLORS[valeur_cell])
                 cells[i][j]["number"].config(bg=c.CELL_COLORS[valeur_cell], 
-                                                 fg=c.CELL_NUMBER_COLORS[valeur_cell],
-                                                 font=c.CELL_NUMBER_FONTS[valeur_cell],
+                                             fg=c.CELL_NUMBER_COLORS[valeur_cell],
+                                             font=c.CELL_NUMBER_FONTS[valeur_cell],
                                              text=str(valeur_cell))
     
 
-def creer_tuile():
+def Generateur_Tuile(mat):
     """ Cette fonction donne à matrice une tuile créée aléatoirement"""
     row = rd.randint(0,3)
     col = rd.randint(0,3)
-    while matrice[row][col]!=0:
+    while mat[row][col]!=0:
         row = rd.randint(0,3)
         col = rd.randint(0,3)
-    matrice[row][col] = np.random.choice(np.arange(2, 5, 2), p=[0.9, 0.1])
+    mat[row][col] = np.random.choice(np.arange(2, 5, 2), p=[0.9, 0.1])
 
 
-def empiler(mat):
+def Empiler(mat):
     """Place les tuiles vers la gauche"""
     matrice2 = [[0]*4 for _ in range (4)]
     for i in range (4):
@@ -84,20 +75,17 @@ def empiler(mat):
     mat = matrice2
     
 
-def combiner(mat):
+def Combiner(mat):
     """ Cette fonction permettra de combiner 2 tuiles de même nombre"""
-    global score
     for i in range (4):
         for j in range (3):
             if mat[i][j] != 0 and mat[i][j] == mat[i][j+1]:
                 mat[i][j] *= 2
                 mat[i][j+1] = 0
-                score += mat[i][j]
-
-
+                
 
            
-def inverse(mat):
+def Inverser(mat):
     """ Cette fonction inverse les éléments de chaque sous-liste"""
     matrice2 = []
     for i in range (4):
@@ -106,7 +94,7 @@ def inverse(mat):
             matrice2[i].append(mat[i][3-j])
     mat = matrice2
                     
-def transpose(mat):
+def Transposer(mat):
     """ Cette fonction fait la transposée d'une liste"""
     matrice2 = [[0]*4 for _ in range (4)]
     for i in range (4):
@@ -117,13 +105,14 @@ def transpose(mat):
 
     # Fonctions associées aux boutons
        
-def start():
+def Generateur():
+    """ Cette fonction génère 2 tuiles aléatoirement et les affiche dans le jeu """
     global cells
     global matrice
     # réinitialiser la plateforme de jeu ainsi que les 2 tuiles placées
     matrice = []
     cells = []
-    creer_plat()
+    Creation_Interface()
     
     # début du code
     matrice = [[0]*4 for _ in range (4)]
@@ -149,91 +138,100 @@ def start():
                                      fg=c.CELL_NUMBER_COLORS[tuile], 
                                      font=c.CELL_NUMBER_FONTS[tuile], 
                                      text=str(tuile)
+ 
                                      )
+def Start_Button():
+    """ Cette fonction est destinée au bouton 'Start' """
+    Generateur() 
+
        
-def exit_game():
-    # fermer la fenêtre graphique
+def Exit_Button():
+    """ Cette fonction est destinée au bouton 'Exit' """
     racine.destroy()
     
-def save_game():
-    # sauvegarder une partie dans un fichier texte
+    
+def Save_Button():
+    """ Cette fonction est destinée au bouton 'Save' """
     fic = open("save_liste.txt", "wb") 
     pc.dump(matrice, fic)
     fic.close()
     
-    # sauvegarder un score dans un fichier texte
-    fic = open("save_score.txt", "wb") 
-    pc.dump(score, fic)
-    fic.close()
 
-def load_game():
-    # charger une partie provenant d'un fichier texte
-    global matrice, score
+def Load_Button():
+    """ Cette fonction est destinée au bouton 'Load' """
+    global matrice
     
+    matrice2 = []
     fic = open("save_liste.txt", "rb")
     b = pc.load(fic)
     fic.close()
     
     for line in b:
-        matrice.append(line)
+        matrice2.append(line)
     
-    # charger un score provenant d'un fichier texte
-    fic = open("save_score.txt", "rb")
-    b = pc.load(fic)
-    fic.close()
-        
-    score = b
+    matrice = matrice2
 
-    creer_plat()
-    actualiser_plat(matrice)
+    Actualisation_Interface(matrice)
     
 
 
     # Fonctions associées aux déplacements
 
-def left_move():
-    empiler(matrice)
-    combiner(matrice)
-    empiler(matrice)
-    creer_tuile()
-    actualiser_plat()
-    game_over()
+def Left_Button():
+    try:
+        Empiler(matrice)
+        Combiner(matrice)
+        Empiler(matrice)
+        Generateur_Tuile(matrice)
+        Actualisation_Interface(matrice)
+        Game_Over()
+    except:
+        pass
 
-def right_move():
-    inverse(matrice)
-    empiler(matrice)
-    combiner(matrice)
-    empiler(matrice)
-    inverse(matrice)
-    creer_tuile()
-    actualiser_plat()
-    game_over()
+def Right_Button():
+    try:
+        Inverser(matrice)
+        Empiler(matrice)
+        Combiner(matrice)
+        Empiler(matrice)
+        Inverser(matrice)
+        Generateur_Tuile(matrice)
+        Actualisation_Interface(matrice)
+        Game_Over()
+    except:
+        pass
 
-def up_move():
-    transpose(matrice)
-    empiler(matrice)
-    combiner(matrice)
-    empiler(matrice)
-    transpose(matrice)
-    creer_tuile()
-    actualiser_plat()
-    game_over()
+def Up_Button():
+    try:
+        Transposer(matrice)
+        Empiler(matrice)
+        Combiner(matrice)
+        Empiler(matrice)
+        Transposer(matrice)
+        Generateur_Tuile(matrice)
+        Actualisation_Interface(matrice)
+        Game_Over()
+    except:
+        pass
 
-def down_move():
-    transpose(matrice)
-    inverse(matrice)
-    empiler(matrice)
-    combiner(matrice)
-    empiler(matrice)
-    inverse(matrice)
-    creer_tuile()
-    actualiser_plat()
-    game_over()
-    
+def Down_Button():
+    try:
+        Transposer(matrice)
+        Inverser(matrice)
+        Empiler(matrice)
+        Combiner(matrice)
+        Empiler(matrice)
+        Inverser(matrice)
+        Generateur_Tuile(matrice)
+        Actualisation_Interface(matrice)
+        Game_Over()         
+    except:
+        pass
+   
     
     # Fonctions associées aux tests au cours du jeu
 
-def mouv_hozizontale():
+def Mouv_Hozizontale():
     """Regarde si on peut toujours se déplacer de manière horizontale"""
     for i in range (4):
         for j in range (3):
@@ -241,7 +239,7 @@ def mouv_hozizontale():
                 return True
     return False
 
-def mouv_verticale():
+def Mouv_Verticale():
     """Regarde si on peut toujours se déplacer de manière verticale"""
     for i in range (3):
         for j in range (4):
@@ -249,17 +247,16 @@ def mouv_verticale():
                 return True
     return False
 
-def game_over():
+def Game_Over():
     global end
     if any(2048 in row for row in matrice):
         end = 1
-        return True
-    elif not any(0 in row for row in matrice) and not mouv_hozizontale() and not mouv_verticale():
+        Affich_Game_Over()
+    elif not any(0 in row for row in matrice) and not Mouv_Hozizontale() and not Mouv_Verticale():
         end = 0
-        return True
-    return False
+        Affich_Game_Over()
 
-def print_game_over():
+def Affich_Game_Over(): #//créer un fond tout blanc pour afficher winner ou looser
     if end==1:
         game_over_frame = tk.Frame(background, borderwidth=2)
         game_over_frame.place(relx=0.5, rely=0.5, anchor="center")
@@ -276,40 +273,23 @@ def print_game_over():
                  bg=c.LOSER_BG,
                  fg=c.GAME_OVER_FONT_COLOR,
                  font=c.GAME_OVER_FONT).pack()
-
-
-#/////////////////////FONCTION FINALE//////////////
-def main():
-    """ Cette fonction regroupera les fonctions permettant de jouer"""
-    start()
-    # while game_over()==False:
-    #     if '<KeyPress-Up>':
-    #         up_move()
-    #     elif '<KeyPress-Down>':
-    #         down_move()
-    #     elif '<KeyPress-Right>':
-    #         right_move()
-    #     elif '<KeyPress-Left>':
-    #         left_move()
-    # print_game_over()        
+     
     
+      
     
-    
-    
-    
-    # Boutons    
+    # Boutons fonctionnement   
     
 Start = tk.Button(text="Start", 
                     height=1, width=4,
                     font=("Helvetica", "10"),
-                    command=main
+                    command=Start_Button
                   )
 Start.grid(row=0, column=0)
 
 Exit = tk.Button(text="Exit", 
                     height=1, width=4,
                     font=("Helvetica", "10"),
-                    command=exit_game
+                    command=Exit_Button
                   )
 Exit.grid(row=1, column=0)
 
@@ -317,16 +297,48 @@ Exit.grid(row=1, column=0)
 Save = tk.Button(text="Save", 
                     height=1, width=4,
                     font=("Helvetica", "10"),
-                    command=save_game
+                    command=Save_Button
                   )
-Save.grid(row=0, column=2)
+Save.grid(row=0, column=1)
 
 Load = tk.Button(text="Load", 
                     height=1, width=4,
                     font=("Helvetica", "10"),
-                    command=load_game
+                    command=Load_Button
                   )
-Load.grid(row=1, column=2)
+Load.grid(row=1, column=1)
+
+
+    # Boutons déplacement  
+    
+Haut = tk.Button(text="Up", 
+                    height=1, width=4,
+                    font=("Helvetica", "10"),
+                    command=Up_Button
+                  )
+Haut.grid(row=0, column=16)
+
+Bas = tk.Button(text="Down", 
+                    height=1, width=4,
+                    font=("Helvetica", "10"),
+                    command=Down_Button
+                  )
+Bas.grid(row=2, column=16)
+
+
+Gauche = tk.Button(text="Left", 
+                    height=1, width=4,
+                    font=("Helvetica", "10"),
+                    command=Left_Button
+                  )
+Gauche.grid(row=1, column=15)
+
+Droite = tk.Button(text="Right", 
+                    height=1, width=4,
+                    font=("Helvetica", "10"),
+                    command=Right_Button
+                  )
+Droite.grid(row=1, column=17)
 
 
     # Background
@@ -337,12 +349,11 @@ background = tk.Frame(racine,
                 height=570
 )
                 
-background.grid(pady=100, columnspan=3)
+background.grid(pady=100, columnspan=20) #columnspan=20 pour placer correctement les boutons
 
 
 
-creer_plat()
-
+Creation_Interface()
 
 
 racine.mainloop()
