@@ -3,6 +3,7 @@ import random as rd # libraire pour choisir aléatoirement des tuiles
 import numpy as np # libraire pour appliquer des probabilités sur les apparitions de tuiles
 import color as c # librairie pour les couleurs des tuiles/canvas
 import pickle as pc # librairie pour la sauvegarde et le chargement de parties
+import time # librairie pour attender 5 secondes avant de fermer l'interface lors qu'il y a un vainqueur ou un perdant
 
 
           
@@ -58,10 +59,13 @@ def Generateur_Tuile(mat):
     """ Cette fonction donne à matrice une tuile créée aléatoirement"""
     row = rd.randint(0,3)
     col = rd.randint(0,3)
-    while mat[row][col]!=0:
-        row = rd.randint(0,3)
-        col = rd.randint(0,3)
-    mat[row][col] = np.random.choice(np.arange(2, 5, 2), p=[0.9, 0.1])
+    if Zero_In_Mat() == True:
+        while mat[row][col]!=0:
+            row = rd.randint(0,3)
+            col = rd.randint(0,3)
+        mat[row][col] = np.random.choice(np.arange(2, 5, 2), p=[0.9, 0.1])
+    else:
+        pass
     return mat
 
 
@@ -83,9 +87,9 @@ def Empiler_Droite(mat):
     matrice2 = [[0]*4 for _ in range (4)]
     for i in range (4):
         pos = -1
-        for j in range (4):
-            if mat[i][j] != 0:
-                matrice2[i][pos] = mat[i][j]
+        for j in range (1,5):
+            if mat[i][-j] != 0:
+                matrice2[i][pos] = mat[i][-j]
                 pos-=1
     mat = matrice2
     return mat
@@ -107,9 +111,9 @@ def Empiler_Bas(mat):
     matrice2 = [[0]*4 for _ in range (4)]
     for j in range (4):
         pos = -1
-        for i in range (4):
-            if mat[i][j] != 0:
-                matrice2[pos][j] = mat[i][j]
+        for i in range (1,5):
+            if mat[-i][j] != 0:
+                matrice2[pos][j] = mat[-i][j]
                 pos-=1
     mat = matrice2
     return mat
@@ -151,24 +155,6 @@ def Combiner_Bas(mat):
                 mat[-i-1][j] = 0
     return mat
                 
-
-           
-def Inverser(mat):
-    """ Cette fonction inverse les éléments de chaque sous-liste"""
-    matrice2 = []
-    for i in range (4):
-        matrice2.append([])
-        for j in range (4):
-            matrice2[i].append(mat[i][3-j])
-    mat = matrice2
-                    
-def Transposer(mat):
-    """ Cette fonction fait la transposée d'une liste"""
-    matrice2 = [[0]*4 for _ in range (4)]
-    for i in range (4):
-        for j in range (4):
-            matrice2[i][j] = mat[j][i]
-    mat = matrice2
     
 
     # Fonctions associées aux boutons
@@ -246,58 +232,79 @@ def Load_Button():
 
 def Left_Button():
     global matrice
-    matrice = Empiler_Gauche(matrice)
-    matrice = Combiner_Gauche(matrice)
-    matrice = Empiler_Gauche(matrice)
-    matrice = Generateur_Tuile(matrice)
-    Actualisation_Interface()
-    #Game_Over()
+    try:
+        matrice = Empiler_Gauche(matrice)
+        matrice = Combiner_Gauche(matrice)
+        matrice = Empiler_Gauche(matrice)
+        matrice = Generateur_Tuile(matrice)
+        Actualisation_Interface()
+        Game_Over()
+    except:
+        pass
 
 
 def Right_Button():
     global matrice
-    matrice = Empiler_Droite(matrice)
-    matrice = Combiner_Droite(matrice)
-    matrice = Empiler_Droite(matrice)
-    matrice = Generateur_Tuile(matrice)
-    Actualisation_Interface()
-    #Game_Over()
+    try:
+        matrice = Empiler_Droite(matrice)
+        matrice = Combiner_Droite(matrice)
+        matrice = Empiler_Droite(matrice)
+        matrice = Generateur_Tuile(matrice)
+        Actualisation_Interface()
+        Game_Over()
+    except:
+        pass
+
 
 def Up_Button():
     global matrice
-    matrice = Empiler_Haut(matrice)
-    matrice = Combiner_Haut(matrice)
-    matrice = Empiler_Haut(matrice)
-    matrice = Generateur_Tuile(matrice)
-    Actualisation_Interface()
-    #Game_Over()
+    try:
+        matrice = Empiler_Haut(matrice)
+        matrice = Combiner_Haut(matrice)
+        matrice = Empiler_Haut(matrice)
+        matrice = Generateur_Tuile(matrice)
+        Actualisation_Interface()
+        Game_Over()
+    except:
+        pass
+
 
 def Down_Button():
     global matrice
-    matrice = Empiler_Bas(matrice)
-    matrice = Combiner_Bas(matrice)
-    matrice = Empiler_Bas(matrice)
-    matrice = Generateur_Tuile(matrice)
-    Actualisation_Interface()
-    #Game_Over()
-         
+    try:
+        matrice = Empiler_Bas(matrice)
+        matrice = Combiner_Bas(matrice)
+        matrice = Empiler_Bas(matrice)
+        matrice = Generateur_Tuile(matrice)
+        Actualisation_Interface()
+        Game_Over()
+    except:
+        pass
     
+            
     # Fonctions associées aux tests au cours du jeu
 
 def Mouv_Hozizontale():
     """Regarde si on peut toujours se déplacer de manière horizontale"""
     for i in range (4):
-        for j in range (3):
-            if matrice[i][j] == matrice[i][j+1]:
+        for j in range (1,3):
+            if matrice[i][j] == matrice[i][j+1] or matrice[i][j] == matrice[i][j-1]:
                 return True
     return False
 
 def Mouv_Verticale():
     """Regarde si on peut toujours se déplacer de manière verticale"""
-    for i in range (3):
+    for i in range (1,3):
         for j in range (4):
-            if matrice[i][j] == matrice[i+1][j]:
+            if matrice[i][j] == matrice[i+1][j] or matrice[i][j] == matrice[i-1][j]:
                 return True
+    return False
+
+def Zero_In_Mat():
+    """Regarde s'il y a encore des espaces vides'"""
+    for i in range(4):
+        if 0 in matrice[i]:
+            return True
     return False
 
 def Game_Over():
@@ -305,9 +312,15 @@ def Game_Over():
     if any(2048 in row for row in matrice):
         end = 1
         Affich_Game_Over()
-    elif not any(0 in row for row in matrice) and not Mouv_Hozizontale() and not Mouv_Verticale():
+        time.sleep(5)
+        racine.destroy()
+    elif Zero_In_Mat()==False and Mouv_Hozizontale()==False and Mouv_Verticale()==False: 
         end = 0
         Affich_Game_Over()
+        time.sleep(5)
+        racine.destroy()
+    else:
+        pass
 
 def Affich_Game_Over(): #//créer un fond tout blanc pour afficher winner ou looser
     if end==1:
@@ -318,7 +331,7 @@ def Affich_Game_Over(): #//créer un fond tout blanc pour afficher winner ou loo
                  bg=c.WINNER_BG,
                  fg=c.GAME_OVER_FONT_COLOR,
                  font=c.GAME_OVER_FONT).pack()
-    else:
+    elif end==0:
         game_over_frame = tk.Frame(background, borderwidth=2)
         game_over_frame.place(relx=0.5, rely=0.5, anchor="center")
         tk.Label(game_over_frame,
@@ -326,6 +339,8 @@ def Affich_Game_Over(): #//créer un fond tout blanc pour afficher winner ou loo
                  bg=c.LOSER_BG,
                  fg=c.GAME_OVER_FONT_COLOR,
                  font=c.GAME_OVER_FONT).pack()
+    else:
+        pass
      
       
     # Boutons fonctionnement   
@@ -398,7 +413,7 @@ background = tk.Frame(racine,
                 bg=c.GRID_COLOR, 
                 bd=3, width=570, 
                 height=570
-)
+                )
                 
 background.grid(pady=100, columnspan=20) #columnspan=20 pour placer correctement les boutons
 
