@@ -232,54 +232,42 @@ def Load_Button():
 
 def Left_Button():
     global matrice
-    try:
-        matrice = Empiler_Gauche(matrice)
-        matrice = Combiner_Gauche(matrice)
-        matrice = Empiler_Gauche(matrice)
-        matrice = Generateur_Tuile(matrice)
-        Actualisation_Interface()
-        Game_Over()
-    except:
-        pass
+    matrice = Empiler_Gauche(matrice)
+    matrice = Combiner_Gauche(matrice)
+    matrice = Empiler_Gauche(matrice)
+    matrice = Generateur_Tuile(matrice)
+    Actualisation_Interface()
+    Game_Over()
 
 
 def Right_Button():
     global matrice
-    try:
-        matrice = Empiler_Droite(matrice)
-        matrice = Combiner_Droite(matrice)
-        matrice = Empiler_Droite(matrice)
-        matrice = Generateur_Tuile(matrice)
-        Actualisation_Interface()
-        Game_Over()
-    except:
-        pass
+    matrice = Empiler_Droite(matrice)
+    matrice = Combiner_Droite(matrice)
+    matrice = Empiler_Droite(matrice)
+    matrice = Generateur_Tuile(matrice)
+    Actualisation_Interface()
+    Game_Over()
 
 
 def Up_Button():
     global matrice
-    try:
-        matrice = Empiler_Haut(matrice)
-        matrice = Combiner_Haut(matrice)
-        matrice = Empiler_Haut(matrice)
-        matrice = Generateur_Tuile(matrice)
-        Actualisation_Interface()
-        Game_Over()
-    except:
-        pass
+    matrice = Empiler_Haut(matrice)
+    matrice = Combiner_Haut(matrice)
+    matrice = Empiler_Haut(matrice)
+    matrice = Generateur_Tuile(matrice)
+    Actualisation_Interface()
+    Game_Over()
 
 
 def Down_Button():
     global matrice
-    try:
-        matrice = Empiler_Bas(matrice)
-        matrice = Combiner_Bas(matrice)
-        matrice = Empiler_Bas(matrice)
-        matrice = Generateur_Tuile(matrice)
-        Actualisation_Interface()
-        Game_Over()
-    except:
-        pass
+    matrice = Empiler_Bas(matrice)
+    matrice = Combiner_Bas(matrice)
+    matrice = Empiler_Bas(matrice)
+    matrice = Generateur_Tuile(matrice)
+    Actualisation_Interface()
+    Game_Over()
     
             
     # Fonctions associées aux tests au cours du jeu
