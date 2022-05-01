@@ -300,13 +300,9 @@ def Game_Over():
     if any(2048 in row for row in matrice):
         end = 1
         Affich_Game_Over()
-        time.sleep(5)
-        racine.destroy()
     elif Zero_In_Mat()==False and Mouv_Hozizontale()==False and Mouv_Verticale()==False: 
         end = 0
         Affich_Game_Over()
-        time.sleep(5)
-        racine.destroy()
     else:
         pass
 
