@@ -3,7 +3,6 @@ import random as rd # libraire pour choisir aléatoirement des tuiles
 import numpy as np # libraire pour appliquer des probabilités sur les apparitions de tuiles
 import color as c # librairie pour les couleurs des tuiles/canvas
 import pickle as pc # librairie pour la sauvegarde et le chargement de parties
-import time # librairie pour attender 5 secondes avant de fermer l'interface lors qu'il y a un vainqueur ou un perdant
 
 
           
