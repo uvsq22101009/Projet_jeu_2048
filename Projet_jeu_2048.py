@@ -306,6 +306,8 @@ def Game_Over():
         pass
 
 def Affich_Game_Over(): #//créer un fond tout blanc pour afficher winner ou looser
+    Creation_Interface()
+    Actualisation_Interface()
     if end==1:
         game_over_frame = tk.Frame(background, borderwidth=2)
         game_over_frame.place(relx=0.5, rely=0.5, anchor="center")
