@@ -28,9 +28,9 @@ def Creation_Interface():
     for i in range (4):
         ligne = []
         for j in range (4):
-            cellule_frame = tk.Frame(background, bg=c.EMPTY_CELL_COLOR, width=120, height=120)
+            cellule_frame = tk.Frame(background, bg=c.COULEUR_CELLULE_VIDE, width=120, height=120)
             cellule_frame.grid(row=i, column=j, padx=5, pady=5)
-            cellule_number = tk.Label(background, bg=c.EMPTY_CELL_COLOR)
+            cellule_number = tk.Label(background, bg=c.COULEUR_CELLULE_VIDE)
             cellule_number.grid(row=i, column=j)
             cellule_data = {"frame": cellule_frame, "number": cellule_number}
             ligne.append(cellule_data)
@@ -44,13 +44,13 @@ def Actualisation_Interface():
         for j in range (4):
             valeur_cellule = matrice[i][j]
             if valeur_cellule == 0:
-                cellules[i][j]["frame"].config(bg=c.EMPTY_CELL_COLOR)
-                cellules[i][j]["number"].config(bg=c.EMPTY_CELL_COLOR, text="") 
+                cellules[i][j]["frame"].config(bg=c.COULEUR_CELLULE_VIDE)
+                cellules[i][j]["number"].config(bg=c.COULEUR_CELLULE_VIDE, text="") 
             else:
-                cellules[i][j]["frame"].config(bg=c.CELL_COLORS[valeur_cellule])
-                cellules[i][j]["number"].config(bg=c.CELL_COLORS[valeur_cellule], 
-                                             fg=c.CELL_NUMBER_COLORS[valeur_cellule],
-                                             font=c.CELL_NUMBER_FONTS[valeur_cellule],
+                cellules[i][j]["frame"].config(bg=c.COULEURS_CELLULES[valeur_cellule])
+                cellules[i][j]["number"].config(bg=c.COULEURS_CELLULES[valeur_cellule], 
+                                             fg=c.NOMBRES_CELLULES[valeur_cellule],
+                                             font=c.FONTS_CELLULES[valeur_cellule],
                                              text=str(valeur_cellule))
     
 
@@ -175,10 +175,10 @@ def Generateur():
     col = rd.randint(0,3)
     tuile = np.random.choice(np.arange(2, 5, 2), p=[0.9, 0.1])
     matrice[row][col] = tuile 
-    cellules[row][col]["frame"].config(bg=c.CELL_COLORS[tuile])
-    cellules[row][col]["number"].config(bg=c.CELL_COLORS[tuile], 
-                                     fg=c.CELL_NUMBER_COLORS[tuile], 
-                                     font=c.CELL_NUMBER_FONTS[tuile], 
+    cellules[row][col]["frame"].config(bg=c.COULEURS_CELLULES[tuile])
+    cellules[row][col]["number"].config(bg=c.COULEURS_CELLULES[tuile], 
+                                     fg=c.NOMBRES_CELLULES[tuile], 
+                                     font=c.FONTS_CELLULES[tuile], 
                                      text=str(tuile)
                                      )
     while matrice[row][col]!=0:
@@ -186,10 +186,10 @@ def Generateur():
         col = rd.randint(0,3)
     tuile = np.random.choice(np.arange(2, 5, 2), p=[0.9, 0.1])
     matrice[row][col] = tuile 
-    cellules[row][col]["frame"].config(bg=c.CELL_COLORS[tuile])
-    cellules[row][col]["number"].config(bg=c.CELL_COLORS[tuile], 
-                                     fg=c.CELL_NUMBER_COLORS[tuile], 
-                                     font=c.CELL_NUMBER_FONTS[tuile], 
+    cellules[row][col]["frame"].config(bg=c.COULEURS_CELLULES[tuile])
+    cellules[row][col]["number"].config(bg=c.COULEURS_CELLULES[tuile], 
+                                     fg=c.NOMBRES_CELLULES[tuile], 
+                                     font=c.FONTS_CELLULES[tuile], 
                                      text=str(tuile)
  
                                      )
@@ -314,7 +314,7 @@ def Affich_Game_Over(): #//créer un fond tout blanc pour afficher winner ou loo
         tk.Label(game_over_frame,
                  text="Winner!",
                  bg=c.WINNER_BG,
-                 fg=c.GAME_OVER_FONT_COLOR,
+                 fg=c.GAME_OVER_FONT_COULEUR,
                  font=c.GAME_OVER_FONT).pack()
     elif end==0:
         game_over_frame = tk.Frame(background, borderwidth=2)
@@ -322,7 +322,7 @@ def Affich_Game_Over(): #//créer un fond tout blanc pour afficher winner ou loo
         tk.Label(game_over_frame,
                  text="Loser!",
                  bg=c.LOSER_BG,
-                 fg=c.GAME_OVER_FONT_COLOR,
+                 fg=c.GAME_OVER_FONT_COULEUR,
                  font=c.GAME_OVER_FONT).pack()
     else:
         pass
