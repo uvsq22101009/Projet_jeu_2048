@@ -395,7 +395,7 @@ Droite.grid(row=1, column=17)
     # Background
         
 background = tk.Frame(racine, 
-                bg=c.GRID_COLOR, 
+                bg=c.GRID_COULEUR, 
                 bd=3, width=570, 
                 height=570
                 )
