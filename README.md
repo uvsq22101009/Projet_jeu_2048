@@ -17,3 +17,5 @@ S2 - MIASHS TD2 - IN200 : projet visant à recréer le jeu 2048 à l'aide de la 
 
 - Le fichier color.py a été prit d'un site internet pour gagner du temps (nous n'avons pas réussi à retrouver le lien en question) 
 
+- https://www.delftstack.com/fr/howto/python/python-weighted-random/  <- np.random.choice()
+
