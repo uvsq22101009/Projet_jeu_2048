@@ -398,10 +398,9 @@ background = tk.Frame(racine,
                 bg=c.GRID_COULEUR, 
                 bd=3, width=570, 
                 height=570
-                )
+                ) 
                 
-background.grid(pady=100, columnspan=20) #columnspan=20 pour placer correctement les boutons
-
+background.grid(pady=40, columnspan=20) #columnspan=20 pour placer correctement les boutons
 
 
 Creation_Interface()
