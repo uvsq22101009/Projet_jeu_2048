@@ -400,7 +400,7 @@ background = tk.Frame(racine,
                 height=570
                 )
                 
-background.grid(pady=100, columnspan=20) #columnspan=20 pour placer correctement les boutons
+background.grid(pady=75, columnspan=20) #columnspan=20 pour placer correctement les boutons
 
 
 
